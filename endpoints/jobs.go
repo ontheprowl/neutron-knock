@@ -35,7 +35,9 @@ func createJob(ctx *fiber.Ctx) error {
 		PartnerKey: "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",
 	}
 
-	scheduler.Every(5).Seconds().Tag(job.JobType.String()).Tag(job.Id).Do(
+	channel.Init()
+
+	scheduler.CronWithSeconds(job.Schedule).Tag(job.JobType.String()).Tag(job.Id).Do(
 		channel.SendMessage, job.Data, job.JobType)
 
 	return ctx.JSON("success!")

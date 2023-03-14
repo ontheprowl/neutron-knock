@@ -3,10 +3,10 @@ package types
 type JobType int
 
 type Payload struct {
-	Message     string
-	Data        map[string]interface{}
-	Contact     string
-	ContactName string
+	Message     string                 `json:"message" xml:"message" form:"message"`
+	Data        map[string]interface{} `json:"data" xml:"data" form:"data"`
+	Contact     string                 `json:"contact" xml:"contact" form:"contact"`
+	ContactName string                 `json:"contactName" xml:"contactName" form:"contactName"`
 }
 
 const (
@@ -20,7 +20,8 @@ func (jt JobType) String() string {
 }
 
 type Job struct {
-	Id      string   `json:"id" xml:"id" form:"id"`
-	JobType JobType  `json:"jobType" xml:"jobType" form:"jobType"`
-	Data    *Payload `json:"jobType" xml:"jobType" form:"jobType"`
+	Id       string   `json:"id" xml:"id" form:"id"`
+	JobType  JobType  `json:"jobType" xml:"jobType" form:"jobType"`
+	Data     *Payload `json:"data" xml:"data" form:"data"`
+	Schedule string   `json:"schedule" xml:"schedule" form:"schedule"`
 }

@@ -1,6 +1,7 @@
 package channels
 
 import (
+	"context"
 	"log"
 
 	sendinblue "github.com/sendinblue/APIv3-go-library/v2/lib"
@@ -18,40 +19,37 @@ func (sib *SendInBlueProvider) Init() {
 }
 
 func (sib *SendInBlueProvider) SendMessage(content *types.Payload, jt types.JobType) {
-
-	log.Println("Hello World")
-	log.Println(content)
-	log.Println(jt)
-	// if jt == types.Email {
-	// 	sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
-	// 		Sender: &sendinblue.SendSmtpEmailSender{
-	// 			Name:  "Team Neutron",
-	// 			Email: "team@neutron.money",
-	// 		},
-	// 		To: []sendinblue.SendSmtpEmailTo{
-	// 			{
-	// 				Email: content.Contact,
-	// 				Name:  content.ContactName,
-	// 			},
-	// 		},
-	// 		Params:     content.Data["params"].(map[string]interface{}),
-	// 		TemplateId: content.Data["templateID"].(int64),
-	// 	})
-	// } else {
-	// 	sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
-	// 		Sender: &sendinblue.SendSmtpEmailSender{
-	// 			Name:  "Team Neutron",
-	// 			Email: "team@neutron.money",
-	// 		},
-	// 		To: []sendinblue.SendSmtpEmailTo{
-	// 			{
-	// 				Email: content.Contact,
-	// 				Name:  content.ContactName,
-	// 			},
-	// 		},
-	// 		Params:     content.Data["params"].(map[string]interface{}),
-	// 		TemplateId: content.Data["templateID"].(int64),
-	// 	})
-	// }
+	log.Println("Sending Email...")
+	templateID := int64(content.Data["templateID"].(float64))
+	if jt == types.Email {
+		sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
+			Sender: &sendinblue.SendSmtpEmailSender{
+				Name:  "Team Neutron",
+				Email: "team@neutron.money",
+			},
+			To: []sendinblue.SendSmtpEmailTo{
+				{
+					Email: content.Contact,
+				},
+			},
+			Params:     content.Data["params"].(map[string]interface{}),
+			TemplateId: templateID,
+		})
+	} else {
+		sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
+			Sender: &sendinblue.SendSmtpEmailSender{
+				Name:  "Team Neutron",
+				Email: "team@neutron.money",
+			},
+			To: []sendinblue.SendSmtpEmailTo{
+				{
+					Email: content.Contact,
+					Name:  content.ContactName,
+				},
+			},
+			Params:     content.Data["params"].(map[string]interface{}),
+			TemplateId: templateID,
+		})
+	}
 
 }
