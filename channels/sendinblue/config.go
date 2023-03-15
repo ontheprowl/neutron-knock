@@ -20,7 +20,8 @@ func (sib *SendInBlueProvider) Init() {
 
 func (sib *SendInBlueProvider) SendMessage(content *types.Payload, jt types.JobType) {
 	log.Println("Sending Email...")
-	templateID := int64(content.Data["templateID"].(float64))
+	sibDataMap := content.Data.(map[string]interface{})
+	templateID := int64(sibDataMap["templateID"].(float64))
 	if jt == types.Email {
 		sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
 			Sender: &sendinblue.SendSmtpEmailSender{
@@ -32,7 +33,7 @@ func (sib *SendInBlueProvider) SendMessage(content *types.Payload, jt types.JobT
 					Email: content.Contact,
 				},
 			},
-			Params:     content.Data["params"].(map[string]interface{}),
+			Params:     sibDataMap["params"].(map[string]interface{}),
 			TemplateId: templateID,
 		})
 	} else {
@@ -47,7 +48,7 @@ func (sib *SendInBlueProvider) SendMessage(content *types.Payload, jt types.JobT
 					Name:  content.ContactName,
 				},
 			},
-			Params:     content.Data["params"].(map[string]interface{}),
+			Params:     sibDataMap["params"].(map[string]interface{}),
 			TemplateId: templateID,
 		})
 	}

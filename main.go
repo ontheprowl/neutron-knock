@@ -13,6 +13,7 @@ import (
 	"github.com/gofiber/helmet/v2"
 
 	"github.com/gofiber/fiber/v2"
+	channels "neutron.money/knock/channels"
 	endpoints "neutron.money/knock/endpoints"
 	scheduler "neutron.money/knock/scheduler"
 )
@@ -45,6 +46,8 @@ func main() {
 	app.Get("/metrics", monitor.New(monitor.Config{Title: "Neutron Knock Server Metrics"}))
 
 	schedulerObject := scheduler.GetScheduler()
+
+	channels.InitDefaultChannels()
 
 	neutronAPIS := app.Group("/")
 	endpoints.AffixJobsRoutes(&neutronAPIS)

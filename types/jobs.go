@@ -3,10 +3,10 @@ package types
 type JobType int
 
 type Payload struct {
-	Message     string                 `json:"message" xml:"message" form:"message"`
-	Data        map[string]interface{} `json:"data" xml:"data" form:"data"`
-	Contact     string                 `json:"contact" xml:"contact" form:"contact"`
-	ContactName string                 `json:"contactName" xml:"contactName" form:"contactName"`
+	Message     string      `json:"message" xml:"message" form:"message"`
+	Data        interface{} `json:"data" xml:"data" form:"data"`
+	Contact     string      `json:"contact" xml:"contact" form:"contact"`
+	ContactName string      `json:"contactName" xml:"contactName" form:"contactName"`
 }
 
 const (

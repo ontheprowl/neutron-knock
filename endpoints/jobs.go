@@ -4,7 +4,9 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	channels "neutron.money/knock/channels/sendinblue"
+
+	channels "neutron.money/knock/channels"
+
 	scheduler "neutron.money/knock/scheduler"
 	"neutron.money/knock/types"
 )
@@ -30,14 +32,13 @@ func createJob(ctx *fiber.Ctx) error {
 		return ctx.JSON("Could not create the specified job... JobType is invalid")
 	}
 
-	var channel types.ChannelProvider = &channels.SendInBlueProvider{
-		ApiKey:     "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",
-		PartnerKey: "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",
+	channel, err := channels.GetChannel(job.JobType)
+
+	if err != nil {
+		return ctx.JSON("No channels configured for the specified jobtype")
 	}
 
-	channel.Init()
-
-	scheduler.CronWithSeconds(job.Schedule).Tag(job.JobType.String()).Tag(job.Id).Do(
+	scheduler.Cron(job.Schedule).Tag(job.JobType.String()).Tag(job.Id).Do(
 		channel.SendMessage, job.Data, job.JobType)
 
 	return ctx.JSON("success!")

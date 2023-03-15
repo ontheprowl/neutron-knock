@@ -2,15 +2,19 @@ module neutron.money/knock
 
 go 1.18
 
-require github.com/joho/godotenv v1.5.1
+require (
+	github.com/go-co-op/gocron v1.18.0
+	github.com/gofiber/fiber/v2 v2.42.0
+	github.com/gofiber/helmet/v2 v2.2.24
+	github.com/joho/godotenv v1.5.1
+	github.com/sendinblue/APIv3-go-library/v2 v2.1.2
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/antihax/optional v1.0.0 // indirect
-	github.com/go-co-op/gocron v1.18.0 // indirect
-	github.com/gofiber/fiber/v2 v2.42.0 // indirect
-	github.com/gofiber/helmet/v2 v2.2.24 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
@@ -21,7 +25,6 @@ require (
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/savsgio/dictpool v0.0.0-20221023140959-7bf2e61cea94 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
-	github.com/sendinblue/APIv3-go-library/v2 v2.1.2 // indirect
 	github.com/tinylib/msgp v1.1.8 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
