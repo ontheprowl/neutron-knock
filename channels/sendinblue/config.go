@@ -22,35 +22,17 @@ func (sib *SendInBlueProvider) SendMessage(content *types.Payload, jt types.JobT
 	log.Println("Sending Email...")
 	sibDataMap := content.Data.(map[string]interface{})
 	templateID := int64(sibDataMap["templateID"].(float64))
-	if jt == types.Email {
-		sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
-			Sender: &sendinblue.SendSmtpEmailSender{
-				Name:  "Team Neutron",
-				Email: "team@neutron.money",
+	sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
+		Sender: &sendinblue.SendSmtpEmailSender{
+			Name:  "Neutron Reminders",
+			Email: "team@neutron.money",
+		},
+		To: []sendinblue.SendSmtpEmailTo{
+			{
+				Email: content.Contact,
 			},
-			To: []sendinblue.SendSmtpEmailTo{
-				{
-					Email: content.Contact,
-				},
-			},
-			Params:     sibDataMap["params"].(map[string]interface{}),
-			TemplateId: templateID,
-		})
-	} else {
-		sib.client.TransactionalEmailsApi.SendTransacEmail(context.Background(), sendinblue.SendSmtpEmail{
-			Sender: &sendinblue.SendSmtpEmailSender{
-				Name:  "Team Neutron",
-				Email: "team@neutron.money",
-			},
-			To: []sendinblue.SendSmtpEmailTo{
-				{
-					Email: content.Contact,
-					Name:  content.ContactName,
-				},
-			},
-			Params:     sibDataMap["params"].(map[string]interface{}),
-			TemplateId: templateID,
-		})
-	}
-
+		},
+		Params:     sibDataMap["params"].(map[string]interface{}),
+		TemplateId: templateID,
+	})
 }

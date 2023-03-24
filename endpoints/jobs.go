@@ -22,26 +22,54 @@ func AffixJobsRoutes(router *fiber.Router) {
 
 func createJob(ctx *fiber.Ctx) error {
 	job := new(types.Job)
+
 	scheduler := scheduler.GetScheduler()
 
 	if err := ctx.BodyParser(job); err != nil {
-		return err
+		return ctx.JSON(map[string]interface{}{
+			"status":  -1,
+			"message": err.Error(),
+		})
+	}
+
+	if job.CallerID == "" {
+		return ctx.JSON(map[string]interface{}{
+			"status":  -1,
+			"message": "No caller ID specified...",
+		})
 	}
 
 	if job.JobType != types.Email && job.JobType != types.Whatsapp {
-		return ctx.JSON("Could not create the specified job... JobType is invalid")
+		return ctx.JSON(map[string]interface{}{
+			"status":  -1,
+			"message": "Could not create the specified job... JobType is invalid",
+		})
 	}
 
 	channel, err := channels.GetChannel(job.JobType)
 
 	if err != nil {
-		return ctx.JSON("No channels configured for the specified jobtype")
+		return ctx.JSON(map[string]interface{}{
+			"status":  -1,
+			"message": "No channels configured for the specified jobtype",
+		})
 	}
 
-	scheduler.Cron(job.Schedule).Tag(job.JobType.String()).Tag(job.Id).Do(
+	jobRef, err := scheduler.Cron(job.Schedule).Tag(job.CallerID).Tag(job.JobType.String()).Tag(job.Id).Do(
 		channel.SendMessage, job.Data, job.JobType)
-
-	return ctx.JSON("success!")
+	if err != nil {
+		return ctx.JSON(map[string]interface{}{
+			"status":  -1,
+			"message": err.Error(),
+		})
+	}
+	return ctx.JSON(map[string]interface{}{
+		"status": 0,
+		"message": map[string]interface{}{
+			"tags":    jobRef.Tags(),
+			"nextRun": jobRef.NextRun(),
+		},
+	})
 }
 
 func listJobs(ctx *fiber.Ctx) error {

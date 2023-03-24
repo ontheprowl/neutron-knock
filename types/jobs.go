@@ -20,6 +20,7 @@ func (jt JobType) String() string {
 }
 
 type Job struct {
+	CallerID string   `json:"callerID" xml:"callerID" form:"callerID"`
 	Id       string   `json:"id" xml:"id" form:"id"`
 	JobType  JobType  `json:"jobType" xml:"jobType" form:"jobType"`
 	Data     *Payload `json:"data" xml:"data" form:"data"`
