@@ -14,8 +14,8 @@ var gupshupChannel, sibChannel types.ChannelProvider
 func InitDefaultChannels() {
 
 	sibChannel = &sendinblue.SendInBlueProvider{
-		ApiKey:     "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",
-		PartnerKey: "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",
+		ApiKey:     "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",
+		PartnerKey: "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",
 	}
 
 	gupshupChannel = &gupshup.GupshupProvider{

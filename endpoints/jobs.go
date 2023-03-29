@@ -16,6 +16,7 @@ func AffixJobsRoutes(router *fiber.Router) {
 	jobsRouter.Post("/create", createJob)
 	// jobsRouter.Post("/update", updateJob)
 	// jobsRouter.Delete("/delete", deleteJob)
+	jobsRouter.Get("/clear", clearJobs)
 	// jobsRouter.Get("/get", getJob)
 	jobsRouter.Get("/list", listJobs)
 }
@@ -69,6 +70,15 @@ func createJob(ctx *fiber.Ctx) error {
 			"tags":    jobRef.Tags(),
 			"nextRun": jobRef.NextRun(),
 		},
+	})
+}
+
+func clearJobs(ctx *fiber.Ctx) error {
+	scheduler := scheduler.GetScheduler()
+	scheduler.Clear()
+	return ctx.JSON(map[string]interface{}{
+		"status":  0,
+		"message": "All jobs cleared...",
 	})
 }
 
