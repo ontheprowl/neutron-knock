@@ -9,6 +9,7 @@ import (
 
 	scheduler "neutron.money/knock/scheduler"
 	"neutron.money/knock/types"
+	utils "neutron.money/knock/utils"
 )
 
 func AffixJobsRoutes(router *fiber.Router) {
@@ -86,7 +87,10 @@ func listJobs(ctx *fiber.Ctx) error {
 	scheduler := scheduler.GetScheduler()
 	jobs := scheduler.Jobs()
 
-	log.Println(jobs)
+	if len(jobs) <= 0 {
+		return ctx.JSON("No jobs scheduled currently...")
+	}
+
 	result := make([][]string, len(jobs))
 
 	for _, v := range jobs {
@@ -94,8 +98,9 @@ func listJobs(ctx *fiber.Ctx) error {
 		result = append(result, v.Tags())
 	}
 
-	if len(jobs) <= 0 {
-		return ctx.JSON("No jobs scheduled currently...")
-	}
-	return ctx.JSON(result)
+	filteredJobs := utils.Filter(result, func(jobDetails []string) bool {
+		return jobDetails != nil
+	})
+
+	return ctx.JSON(filteredJobs)
 }
